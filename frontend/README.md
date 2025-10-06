@@ -68,3 +68,58 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Vir ons om te onboard
+This is a React application folder structure created by Create React App. Here's what each file/folder does:
+📁 node_modules/
+
+Contains all installed npm packages and dependencies
+Created when you run npm install
+Should be in .gitignore (not committed to version control)
+
+📁 public/
+
+Static files that don't go through the build process
+Contains index.html (the single HTML page for your React app)
+Images, favicons, manifest files that need direct access
+
+📁 src/ (Source code - where you write your app)
+Core Files:
+
+App.css - Styles for the App component
+App.js - Main React component (your app starts here)
+App.test.js - Unit tests for App component
+index.css - Global styles for the entire app
+index.js - Entry point - renders App into the DOM
+logo.svg - React logo (default, can be deleted)
+reportWebVitals.js - Performance monitoring (optional)
+setupTests.js - Configuration for testing library
+
+📄 Root Files:
+
+.gitignore - Tells Git which files to ignore (node_modules, build, etc.)
+package-lock.json - Locks exact versions of dependencies
+package.json - Project configuration, dependencies, scripts
+README.md - Project documentation
+
+🔄 How it flows:
+index.html (public/)
+    ↓
+index.js (src/) 
+    ↓
+App.js (src/)
+    ↓
+Your components
+
+public/index.html has a <div id="root">
+src/index.js finds that div and renders...
+src/App.js (your main component)
+App.js renders your other components
+
+💡 Where to work:
+
+Add new components → src/ folder
+Add images/styles → src/ folder (imported in components)
+Static files → public/ folder (accessed via public URL)
+
+This is the standard React structure - clean, simple, and ready to build upon! 🚀
