@@ -1,11 +1,21 @@
 import express from 'express';
-import { Student } from '../model/Student.js';
+import { UserFactory } from '../controller/UserFactory.js';
 
 const router = express.Router();
 
-router.get('/test', (req, res) => {
-  const student = new Student(1, 'Tiaan', 'tiaan@example.com', 'hashedPass', 'CS Major');
-  res.json({ message: `Student created: ${student.name}` });
+router.get('/create-student', (req, res) => {
+
+  // Example data coming from a request body or database
+  const userData = { 
+      userID: 'u123', 
+      name: 'John Doe', 
+      email: 'john@example.com', 
+      passwordHash: 'hashed12345' 
+  };
+
+  const newStudent = UserFactory.createUser('student',userData);
+
+  res.json({ message: `Student created: ${newStudent.userID}, ${newStudent.name}, ${newStudent.email}` });
 });
 
 export default router;

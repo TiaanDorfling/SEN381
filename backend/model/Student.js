@@ -1,7 +1,7 @@
 import {User} from './User.js' 
 
 export class Student extends User{
-    constructor(userID, name, email, passwordHash, academicBackground){
+    constructor(userID, name, email, passwordHash, academicBackground = 'BCOMP Student'){
         super(userID, name, email, passwordHash, 'student');
         this.academicBackground = academicBackground;
         this.subscribedTopics = [];
