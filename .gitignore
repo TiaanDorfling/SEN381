@@ -1,0 +1,41 @@
+# === Root-level ===
+node_modules/
+.env
+.env.*
+package-lock.json
+
+# === Backend ===
+backend/node_modules/
+backend/.env
+backend/.env.*
+backend/build/
+backend/dist/
+backend/coverage/
+backend/debug.log
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# === Frontend ===
+frontend/node_modules/
+frontend/.env
+frontend/.env.*
+frontend/build/
+frontend/dist/
+frontend/coverage/
+frontend/debug.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# === Common ===
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === PnP ===
+.pnp
+.pnp.js
