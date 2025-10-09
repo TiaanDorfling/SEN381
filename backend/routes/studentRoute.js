@@ -15,7 +15,7 @@ router.get('/get-student', (req, res) => {
 
   const newStudent = UserFactory.createUser('student',userData);
 
-  res.json({ message: `Student created: ${newStudent.userID}, ${newStudent.name}, ${newStudent.email}` });
+  res.json({ message: `Student fetched: ${newStudent.userID}, ${newStudent.name}, ${newStudent.email}` });
 });
 
 export default router;

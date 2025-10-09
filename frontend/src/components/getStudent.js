@@ -51,7 +51,7 @@ const StudentCreator = () => {
             <h2 style={{border: '2px solid rgba(255, 57, 156, 1)'}}>User Factory Test Result</h2>
             <p style={{border:'2px solid rgba(255, 57, 156, 1)'}}>✅ **Success:** {creationMessage}</p>
             <small>
-                (The backend used the UserFactory to create a Student instance 
+                (The backend used the UserFactory to get a Student instance 
                 and returned this message.)
             </small>
         </div>
