@@ -5,17 +5,38 @@ const router = express.Router();
 
 router.get('/get-student', (req, res) => {
 
-  // Example data coming from a request body or database
-  const userData = { 
-      userID: 'u123', 
-      name: 'John Doe', 
-      email: 'john@example.com', 
-      passwordHash: 'hashed12345' 
+  const mockDbData = { 
+      _id: '60c72b2f9f1b2c001c8e1d2a', // MongoDB's unique ID
+      name: 'Jane Doe', 
+      email: 'jane@example.com', 
+      academicBackground: 'BCOMP Student',
+      // Mongoose automatically adds 'role: student' based on the model/discriminator
   };
 
-  const newStudent = UserFactory.createUser('student',userData);
+  try{
+  const Student = UserFactory.createUser('student',mockDbData);
 
-  res.json({ message: `Student fetched: ${newStudent.userID}, ${newStudent.name}, ${newStudent.email}` });
+  const studentName = Student.name;
+  const studentID = Student._id; 
+  const studentRole = Student.role;
+  const studentEmail = Student.email;
+
+  return res.status(200).json({ 
+      message: `Student document loaded from mock data.`,
+      student: {
+          id: studentID,
+          name: studentName,
+          email: studentEmail,
+          role: studentRole,
+          academicBackground: Student.academicBackground
+      }
+  });
+  }
+  catch(error){
+    console.error("Error loading student:", error);
+    return res.status(500).json({ message: "Server error loading student." });
+  }
+
 });
 
 export default router;
