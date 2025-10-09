@@ -1,4 +1,6 @@
 import { UserFactory } from '../controller/UserFactory.js';
+import bcrypt from 'bcrypt'; 
+import jwt from 'jsonwebtoken';
 
 export class Auth{
     static async register(req,res){
@@ -11,21 +13,22 @@ export class Auth{
             const hashedPassword = await bcrypt.hash(password, salt);
 
             const newUser = UserFactory.createUser(role,{name, email, passwordHash: hashedPassword});
-            //save user to database
-            //
+            
+            const savedUser = await newUser.save();
+
             //generate JWT
             const token = jwt.sign(
-            { id: newUser.userID, userType: role },
+            { id: savedUser._id, userType: role },
             process.env.JWT_SECRET, 
             { expiresIn: '1h' } 
             );
                 return res.status(201).json({
-                message: `${type} registered successfully!`,
+                message: `${role} registered successfully!`,
                 token,
                 user: {
-                    id: newUser.userID,
-                    email: newUser.email,
-                    name: newUser.name
+                    id: savedUser._id,
+                    email: savedUser.email,
+                    name: savedUser.name
                 }
             });
         }
