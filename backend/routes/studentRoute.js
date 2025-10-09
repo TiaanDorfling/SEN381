@@ -3,7 +3,7 @@ import { UserFactory } from '../controller/UserFactory.js';
 
 const router = express.Router();
 
-router.get('/create-student', (req, res) => {
+router.get('/get-student', (req, res) => {
 
   // Example data coming from a request body or database
   const userData = { 

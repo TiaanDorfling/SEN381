@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import StudentCreator from './components/createStudent';
+import StudentCreator from './components/getStudent.js'
 
 function App() {
   return (

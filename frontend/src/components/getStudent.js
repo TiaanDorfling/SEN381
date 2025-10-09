@@ -12,10 +12,10 @@ const StudentCreator = () => {
     const [error, setError] = useState(null);
 
     // The endpoint matches your Express route
-    const API_ENDPOINT = 'http://localhost:5000/students/create-student'; 
+    const API_ENDPOINT = 'http://localhost:5000/students/get-student'; 
 
     useEffect(() => {
-        const createStudent = async () => {
+        const getStudent = async () => {
             try {
                 // PRACTICAL STEP: Use axios.get to call the Express route
                 const response = await axios.get(API_ENDPOINT);
@@ -33,7 +33,7 @@ const StudentCreator = () => {
             }
         };
 
-        createStudent();
+        getStudent();
     }, []); // Empty dependency array means it runs once on component mount
 
     // --- Render Logic ---
@@ -47,9 +47,9 @@ const StudentCreator = () => {
     }
 
     return (
-        <div style={{ padding: '20px', border: '1px solid #ccc' }}>
-            <h2>User Factory Test Result</h2>
-            <p>✅ **Success:** {creationMessage}</p>
+        <div style={{ padding: '20px', border: '1px solid #daff75ff', backgroundColor:'rgba(10, 82, 10, 1)'}}>
+            <h2 style={{border: '2px solid rgba(255, 57, 156, 1)'}}>User Factory Test Result</h2>
+            <p style={{border:'2px solid rgba(255, 57, 156, 1)'}}>✅ **Success:** {creationMessage}</p>
             <small>
                 (The backend used the UserFactory to create a Student instance 
                 and returned this message.)
