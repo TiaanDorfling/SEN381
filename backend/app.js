@@ -9,6 +9,7 @@ import cors from 'cors';
 import studentRoute from './routes/studentRoute.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import aiRouter from './routes/aiRouter.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,5 +26,6 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/students', studentRoute);
+app.use('/ai', aiRouter);
 
 export default app;
