@@ -20,4 +20,19 @@ export class UserFactory{
                 return null;
         }
     }
+
+    static async findByEmail(email) {
+    // Check across all possible models
+    const admin = await AdminModel.findOne({ email });
+    if (admin) return { ...admin.toObject(), role: 'admin', model: 'AdminModel' };
+
+    const tutor = await TutorModel.findOne({ email });
+    if (tutor) return { ...tutor.toObject(), role: 'tutor', model: 'TutorModel' };
+
+    const student = await StudentModel.findOne({ email });
+    if (student) return { ...student.toObject(), role: 'student', model: 'StudentModel' };
+
+    // None found
+    return null;
+  }
 }
