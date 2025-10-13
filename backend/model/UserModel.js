@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema({
   toJSON: { virtuals: true, getters: true },
   toObject: { virtuals: true, getters: true },
 });
-
+UserSchema.index({ email: 1 }, { unique: true });
 // Base model for discriminators (AdminModel, TutorModel, etc.)
 const UserModel = mongoose.model('User', UserSchema);
 
