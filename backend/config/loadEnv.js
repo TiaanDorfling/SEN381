@@ -7,13 +7,13 @@ export function loadEnv() {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const envPath = path.join(__dirname, '..', '.env');
-  console.log(`ℹ️ Trying to load env from: ${envPath}`);
+  console.log(`ℹTrying to load env from: ${envPath}`);
 
   let buf;
   try {
     buf = fs.readFileSync(envPath);
   } catch {
-    console.error('❌ backend/.env not found at the path above.');
+    console.error('backend/.env not found at the path above.');
     return;
   }
 
@@ -47,5 +47,5 @@ export function loadEnv() {
   for (const k of keys) {
     if (process.env[k] === undefined) process.env[k] = parsed[k];
   }
-  console.log(`✅ Loaded ${keys.length} env var(s): ${keys.join(', ') || '(none)'}`);
+  console.log(`Loaded ${keys.length} env var(s): ${keys.join(', ') || '(none)'}`);
 }
