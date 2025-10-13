@@ -1,15 +1,21 @@
-export class Topic {
-  constructor(topicId, title, description, createdBy) {
-    this.topicId = topicId;
-    this.title = title;
-    this.description = description;
-    this.createdBy = createdBy;
-    this.subscribers = [];
-    this.resources = [];
-    this.questions = [];
-  }
+import mongoose from 'mongoose';
 
-  addSubscriber(student) { this.subscribers.push(student); }
-  broadcastTopic() { /* logic */ }
-  notifyTutors() { /* logic */ }
-}
+const topicSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    body: { type: String, required: true, trim: true },
+    creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    moduleCode: { type: String, required: true, trim: true },
+    status: { type: String, enum: ['OPEN', 'ASSIGNED', 'RESOLVED'], default: 'OPEN' },
+    tags: [{ type: String, trim: true }]
+  },
+  { timestamps: true }
+);
+
+topicSchema.index({ title: 'text', body: 'text', tags: 1 });
+
+topicSchema.methods.addSubscriber = function(student) {};
+topicSchema.methods.broadcastTopic = function() {};
+topicSchema.methods.notifyTutors = function() {};
+
+export default mongoose.model('Topic', topicSchema);

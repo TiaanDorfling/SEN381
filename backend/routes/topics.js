@@ -3,7 +3,7 @@ import express from 'express';
 import { body, query } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import { auth } from '../middleware/auth.js';
-import Topic from '../models/Topic.js';
+import Topic from '../model/Topic.js';
 
 const router = express.Router();
 

@@ -26,7 +26,7 @@ await connectDB(process.env.MONGO_URI);
 
 const app = express();
 
-//debugging
+// --- debugging ---
 app.use((req, res, next) => {
   console.log('--- Incoming Request ---');
   console.log('Method:', req.method);
