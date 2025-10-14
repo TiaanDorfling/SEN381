@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import User from '../model/UserModel.js';
-import { auth } from '../middleware/auth.js';
 import { generateToken, verifyToken } from '../utils/jwt.js';
 
 const router = express.Router();
