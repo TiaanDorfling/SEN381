@@ -8,11 +8,11 @@ import { dirname } from 'path';
 import { loadEnv } from './config/loadEnv.js';
 import { connectDB } from './config/db.js';
 
+// Routers
 import indexRouter from './routes/index.js';
-
-// NEW
 import authRoutes from './routes/auth.js';
 import topicRoutes from './routes/topics.js';
+import questionRoutes from './routes/question.js';
 import { notFound, errorHandler } from './middleware/error.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,25 +37,24 @@ app.use((req, res, next) => {
 
 // ---- Middleware ----
 app.use(morgan('dev'));
-const allowedOrigins = process.env.CLIENT_ORIGIN?.split(',') || ['http://localhost:3000'];
-
 app.use(
   cors({
-    origin: allowedOrigins,
-    credentials: true, // allow cookies
+    origin: process.env.CLIENT_ORIGIN?.split(',') || '*',
+    credentials: true
   })
 );
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+// ---- Static ----
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ---- Routes ----
 app.use('/', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/topics', topicRoutes);
+app.use('/api/questions', questionRoutes);
 
 // ---- 404 & Error ----
 app.use(notFound);
