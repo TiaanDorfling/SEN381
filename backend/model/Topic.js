@@ -12,7 +12,8 @@ const topicSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-topicSchema.index({ title: 'text', body: 'text', tags: 1 });
+topicSchema.index({ title: 'text', body: 'text' });
+topicSchema.index({ tags: 1 }); 
 
 topicSchema.methods.addSubscriber = function(student) {};
 topicSchema.methods.broadcastTopic = function() {};

@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "name": "Tiaan Dorfling",
-  "email": "tiaan.dorfling@student.belgiumcampus.ac.za",
+  "email": "tiaan@student.belgiumcampus.ac.za",
   "password": "MyStrongPassword123!",
-  "role": "student"
+  "role": "tutor"
 }
 ###
 POST http://localhost:5000/api/auth/login
@@ -15,4 +15,17 @@ Content-Type: application/json
 {
   "email": "tiaan.dorfling@student.belgiumcampus.ac.za",
   "password": "MyStrongPassword123!"
+}
+###
+GET http://localhost:5000/api/topics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVkMjMxYzViMWY3YmM0YzE0MjhjMjkiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDQyNTgyOCwiZXhwIjoxNzYwNDI5NDI4fQ.bdiXfoowO4iuz95uX1ceia8p9o3u3ceYkivGG8VUINk
+###
+POST http://localhost:5000/api/topics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVkMjMxYzViMWY3YmM0YzE0MjhjMjkiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDQyNTgyOCwiZXhwIjoxNzYwNDI5NDI4fQ.bdiXfoowO4iuz95uX1ceia8p9o3u3ceYkivGG8VUINk
+Content-Type: application/json
+
+{
+  "title": "Test381",
+  "body": "This is a test module",
+  "moduleCode": "101"
 }

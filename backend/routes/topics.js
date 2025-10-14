@@ -12,7 +12,7 @@ router.get(
   '/',
   [query('keyword').optional().isString().trim().isLength({ min: 1 })],
   validate,
-  auth(false),
+  auth(true),
   async (req, res) => {
     try {
       const { keyword } = req.query;
@@ -25,7 +25,10 @@ router.get(
         .lean()
         .exec();
 
-      return res.status(200).json(topics);
+      return res.status(200).json({
+        message: "topics received successfully",
+        topics
+      });
     } catch (err) {
       console.error('GET /topics', err);
       return res.status(500).json({ error: 'Failed to fetch topics' });
@@ -54,7 +57,10 @@ router.post(
         tags,
         creatorId: req.user.id
       });
-      return res.status(201).json(topic);
+      return res.status(201).json({
+        message: "topic created succesfully",
+        topic
+      });
     } catch (err) {
       console.error('POST /topics', err);
       return res.status(500).json({ error: 'Failed to create topic' });

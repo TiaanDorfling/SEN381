@@ -55,7 +55,7 @@ app.use(cors());
 
 // ---- Routes ----
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 // app.use('/students', studentRoute); this was a test route
 app.use('/api/auth', authRoutes);
 app.use('/api/topics', topicRoutes);
