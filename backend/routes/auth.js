@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import User from '../model/UserModel.js';
+import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -67,6 +68,11 @@ router.post(
         { expiresIn: '1h' }
       );
 
+      res.cookie('jwt', token, {
+        httpOnly: true, // Prevents client-side JS access (XSS protection) 🛡️
+        sameSite: 'strict', // CSRF protection
+        maxAge: 6 * 60 * 60 * 1000, // Cookie expiration in milliseconds (6 hours)
+    });
 
       return res.status(200).json({
         message: 'Login successful!',
@@ -84,5 +90,24 @@ router.post(
     }
   }
 );
+
+router.post('/logout', async (req, res) => {
+    try {
+        // 1. Invalidate the Cookie (Server-Side)
+        res.cookie('jwt', '', { //clear cookie payload to empty string
+            httpOnly: true, //only server side access tp cookie
+            sameSite: 'strict', 
+            expires: new Date(0) // To time cookie out, date is 1970 jan 1
+        });
+
+        return res.status(200).json({ message: 'Logout successful. Cookie cleared.' }); //go to log in page here later.
+
+    } catch (error) {
+        console.error('Logout error:', error);
+        return res.status(500).json({ message: 'Server error during logout.' });
+    }
+});
+
+
 
 export default router;

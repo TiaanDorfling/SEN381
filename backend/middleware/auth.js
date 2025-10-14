@@ -4,14 +4,13 @@ import jwt from 'jsonwebtoken';
 // Verify JWT and attach user to request
 export function auth(required = true) {
   return (req, res, next) => {
-    const header = req.headers.authorization || '';
-    const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+    const token = req.cookies.jwt; 
 
     if (!token) {
       if (!required) return next();
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'No token' });
     }
-
+    
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       req.user = { id: payload.sub, role: payload.role };
@@ -33,4 +32,6 @@ export function requireRole(...roles) {
     next();
   };
 }
+
+
 
