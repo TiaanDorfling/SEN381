@@ -9,8 +9,6 @@ import { loadEnv } from './config/loadEnv.js';
 import { connectDB } from './config/db.js';
 
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
-// import studentRoute from './routes/studentRoute.js';
 
 // NEW
 import authRoutes from './routes/auth.js';
@@ -55,8 +53,6 @@ app.use(cors());
 
 // ---- Routes ----
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.use('/students', studentRoute); this was a test route
 app.use('/api/auth', authRoutes);
 app.use('/api/topics', topicRoutes);
 
