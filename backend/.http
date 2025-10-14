@@ -29,3 +29,27 @@ Content-Type: application/json
 }
 ### 
 POST http://localhost:5000/api/auth/logout
+
+###
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@student.belgiumcampus.ac.za",
+  "password": "Password123!",
+  "role": "student"
+}
+
+###
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@student.belgiumcampus.ac.za",
+  "password": "Password123!"
+}
+
+###
+GET http://localhost:5000/api/topics
+

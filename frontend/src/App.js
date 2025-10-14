@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import StudentCreator from './components/getStudent.js'
+import axios from 'axios';
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:5000';
 
 function App() {
   return (

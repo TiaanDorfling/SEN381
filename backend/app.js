@@ -37,19 +37,20 @@ app.use((req, res, next) => {
 
 // ---- Middleware ----
 app.use(morgan('dev'));
+const allowedOrigins = process.env.CLIENT_ORIGIN?.split(',') || ['http://localhost:3000'];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN?.split(',') || '*',
-    credentials: true
+    origin: allowedOrigins,
+    credentials: true, // allow cookies
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-// ---- Static (backend/public) ----
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
 
 // ---- Routes ----
 app.use('/', indexRouter);
