@@ -84,7 +84,7 @@ Content-Type: application/json
 }
 
 ### admin delete user
-
+DELETE http://localhost:5000/api/user/delete/68ee3de3bef9dd1edb8cac21 
 ### admin create user
 POST http://localhost:5000/api/user/create-user
 Content-Type: application/json
