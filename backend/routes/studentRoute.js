@@ -21,5 +21,4 @@ router.get('/get-student', (req, res) => {
   }
 });
 
-
 export default router;
