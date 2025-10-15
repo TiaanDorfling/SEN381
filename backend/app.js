@@ -14,6 +14,7 @@ import authRoutes from './routes/auth.js';
 import topicRoutes from './routes/topics.js';
 import questionRoutes from './routes/question.js';
 import { notFound, errorHandler } from './middleware/error.js';
+import userRouter from './routes/userRoute.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -55,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/user', userRouter)
 
 // ---- 404 & Error ----
 app.use(notFound);

@@ -27,7 +27,7 @@ Content-Type: application/json
   "body": "This is a test module",
   "moduleCode": "102"
 }
-### 
+### Log Out
 POST http://localhost:5000/api/auth/logout
 
 ### Student registration
@@ -66,3 +66,11 @@ Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVlM2RlM2JlZjlkZDF
 
 ### Student views their questions
 GET http://localhost:5000/api/questions
+
+### update profile
+PUT http://localhost:5000/api/user/update-user
+Content-Type: application/json
+
+{
+  "email": "tiaan.dorfling@student.belgiumcampus.ac.za"
+}
