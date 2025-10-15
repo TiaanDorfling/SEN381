@@ -32,28 +32,38 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-export const getCurrentUser = async (req, res) => {
+export const adminUpdateUser = async (req, res) => {
   try {
-    // Get user ID from middleware (req.user is set in auth.js)
-    const userId = req.user?.id;
+    const { id } = req.params; // user ID to update
+    const { name, email, password, role } = req.body;
 
-    if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized – no user found in request' });
+    const user = await UserModel.findById(id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Update fields if provided
+    if (name) user.name = name.trim();
+    if (email) user.email = email.toLowerCase().trim();
+    if (password) {
+      const bcrypt = await import('bcryptjs');
+      user.passwordHash = await bcrypt.hash(password, 10);
+    }
+    if (role && ['admin', 'tutor', 'student'].includes(role)) {
+      user.role = role;
     }
 
-    // Find user and exclude password hash
-    const user = await UserModel.findById(userId).select('-passwordHash');
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    await user.save();
 
     res.status(200).json({
-      message: 'Current user retrieved successfully',
-      user,
+      message: 'User updated successfully by admin',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-    res.status(500).json({ error: 'Server error retrieving user profile' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error updating user' });
   }
 };

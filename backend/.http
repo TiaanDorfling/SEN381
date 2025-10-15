@@ -1,4 +1,4 @@
-###
+### register
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
@@ -8,12 +8,12 @@ Content-Type: application/json
   "password": "MyStrongPassword123!",
   "role": "tutor"
 }
-###
+### admin log in
 POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "tiaan.dorfling@student.belgiumcampus.ac.za",
+  "email": "dorfling@student.belgiumcampus.ac.za",
   "password": "MyStrongPassword123!"
 }
 ###
@@ -74,3 +74,15 @@ Content-Type: application/json
 {
   "email": "tiaan.dorfling@student.belgiumcampus.ac.za"
 }
+
+### admin update profile of someone else
+PUT http://localhost:5000/api/user/update/68ee3de3bef9dd1edb8cac21
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+### admin delete user
+
+### admin add user
