@@ -8,6 +8,7 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
@@ -20,6 +21,7 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.1",
     "morgan": "^1.10.1",
+    "openai": "^6.3.0",
     "sen381": "file:.."
   },
   "devDependencies": {

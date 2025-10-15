@@ -15,6 +15,9 @@ import topicRoutes from './routes/topics.js';
 import questionRoutes from './routes/question.js';
 import { notFound, errorHandler } from './middleware/error.js';
 import userRouter from './routes/userRoute.js';
+import aiRoutes from './routes/ai.js';
+import studentRoute from './routes/studentRoute.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,6 +60,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/user', userRouter)
+app.use('/api/ai', aiRoutes);
+app.use('/students', studentRoute);
 
 // ---- 404 & Error ----
 app.use(notFound);

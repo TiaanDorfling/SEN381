@@ -14,5 +14,4 @@ AdminSchema.methods.overseeContent = function() {}
 
 const AdminModel = UserModel.discriminator('admin', AdminSchema);
 
-
 export default AdminModel;
