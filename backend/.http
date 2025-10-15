@@ -1,4 +1,4 @@
-###
+### register
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
@@ -8,12 +8,12 @@ Content-Type: application/json
   "password": "MyStrongPassword123!",
   "role": "tutor"
 }
-###
+### admin log in
 POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "tiaan.dorfling@student.belgiumcampus.ac.za",
+  "email": "dorfling@student.belgiumcampus.ac.za",
   "password": "MyStrongPassword123!"
 }
 ###
@@ -73,36 +73,4 @@ Content-Type: application/json
 
 {
   "email": "tiaan.dorfling@student.belgiumcampus.ac.za"
-}
-
-### AI Chat test
-POST http://localhost:5000/api/ai/chat
-Content-Type: application/json
-
-{
-  "message": "Explain the difference between a tutor and an admin on CampusLearn."
-}
-
-### Gemini Chat Test
-POST http://localhost:5000/api/ai/chat
-Content-Type: application/json
-
-{
-  "message": "Briefly explain what SEN381 is about."
-}
-
-### Test Gemini Chat (Free)
-POST http://localhost:5000/api/ai/chat
-Content-Type: application/json
-
-{
-  "message": "Explain what SEN381 focuses on and how CampusLearn helps students."
-}
-
-### Test Gemini Chat
-POST http://localhost:5000/api/ai/chat
-Content-Type: application/json
-
-{
-  "message": "Briefly explain what SEN381 focuses on."
 }
