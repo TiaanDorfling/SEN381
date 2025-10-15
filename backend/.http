@@ -85,4 +85,13 @@ Content-Type: application/json
 
 ### admin delete user
 
-### admin add user
+### admin create user
+POST http://localhost:5000/api/user/create-user
+Content-Type: application/json
+
+{
+  "name": "Katryn Steenkamp",
+  "email": "Katryn@student.belgiumcampus.ac.za",
+  "password": "MyStrongPassword123!",
+  "role": "tutor"
+}
