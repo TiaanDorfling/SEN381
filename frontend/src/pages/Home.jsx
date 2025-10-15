@@ -17,10 +17,11 @@ function Home() {
 
       {/* Overview Section */}
       <div className="overview">
-        <h2>Welcome back!</h2>
+        <h2>Overview</h2>
         <p>
+        
           Here’s a quick overview of your learning progress. Stay motivated and
-          keep pushing forward—every module completed brings you closer to
+          keep pushing forward every module completed brings you closer to
           success!
         </p>
       </div>
