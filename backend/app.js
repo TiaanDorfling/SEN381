@@ -62,7 +62,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ============================================================================
@@ -78,7 +78,7 @@ import authRoutes from './routes/auth.js';
 import topicRoutes from './routes/topics.js';
 import questionRoutes from './routes/question.js';
 import userRouter from './routes/userRoute.js';
-import aiRoutes from './routes/ai.js';
+import aiRoutes from './routes/ai.js'; // make sure path is correct
 import studentRoute from './routes/studentRoute.js';
 
 // ============================================================================
