@@ -4,6 +4,8 @@ import { body, query } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import { auth } from '../middleware/auth.js';
 import Topic from '../model/Topic.js';
+import UserModel from '../model/UserModel.js';
+import e from 'express';
 
 const router = express.Router();
 
@@ -64,6 +66,69 @@ router.post(
     } catch (err) {
       console.error('POST /topics', err);
       return res.status(500).json({ error: 'Failed to create topic' });
+    }
+  }
+);
+
+router.post(
+  '/subscribe',
+  auth(true),
+  async (req, res) => {
+    const topicId = req.body.topicId;
+    const id = req.user._id; //from auth
+
+    try {
+        const topic = await Topic.findById(topicId);
+
+        if (!topic) {
+          return res.status(404).json({ message: `Topic not found` });
+        }      
+
+        await topic.addSubscriber(id);
+
+        return res.status(200).json({ 
+          message: 'Successfully subscribed to topic.',
+          topicId: topic._id,
+          newSubscriberCount: topic.subscribers.length
+        });        
+    }
+    catch (error){
+      console.error(error);
+      return res.status(500).json({ message: 'Failed to subscribe due to a server error.' });
+    }
+  }
+);
+
+router.delete(
+  '/unsubscribe',
+  auth(true), // Ensure the user is logged in
+  async (req, res) => {
+    // 1. Get IDs from the request
+    const topicId = req.body.topicId;
+    const userId = req.user._id; // The user ID to be removed
+
+    try {
+      // 2. Find the specific Topic document
+      const topic = await Topic.findById(topicId);
+
+      if (!topic) {
+        return res.status(404).json({ message: 'Topic not found' });
+      }
+
+      // 3. Call the instance method to remove the subscriber and save
+      // Your method handles the filtering and saving in one call.
+      await topic.removeSubscriber(userId); 
+
+      // 4. Send a successful response
+      return res.status(200).json({ 
+        message: 'Successfully unsubscribed from topic.',
+        topicId: topic._id,
+        newSubscriberCount: topic.subscribers.length // Return the new count
+      });
+      
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Failed to unsubscribe due to a server error.' });
     }
   }
 );

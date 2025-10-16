@@ -132,6 +132,21 @@ Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg
 ### 🔍 Search topics by keyword
 GET http://localhost:5000/api/topics?keyword=linkedeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFUeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MzksImV4cCI6MTc2MDUyOTIzOX0.LBZlOhq4OE-NU-MphPHJYlA26W6wvoBN3Dx_-h8QADw
 
+### Subscribe to topic
+POST http://localhost:5000/api/topics/subscribe
+Content-Type: application/json
+
+{
+  "topicId": "68f0f57183f54878f967e32b"
+}
+
+### Remove subscriber by id
+DELETE  http://localhost:5000/api/topics/unsubscribe
+Content-Type: application/json
+
+{
+  "topicId": "68f0f57183f54878f967e32b"
+}
 
 ############################################
 ### 5️⃣ QUESTIONS MODULE
