@@ -57,7 +57,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "student1@student.belgiumcampus.ac.za",
+  "email": "tutor1@student.belgiumcampus.ac.za",
   "password": "StrongPass123!"
 }
 
@@ -179,6 +179,15 @@ Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg
 GET http://localhost:5000/api/questions
 Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
 
+### Tutor Posts Response to a Question
+POST http://localhost:5000/api/questions/68ef808158d652878d928880/response
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmMjU4ZDY1Mjg3OGQ5Mjg4NjYiLCJyb2xlIjoidHV0b3IiLCJpYXQiOjE3NjA2NDQwOTcsImV4cCI6MTc2MDY0NzY5N30.OEceP16hRtvqjdQGlgDzS7xihXf5nahjtPpleuJlGmA; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+{
+  "content": "A detailed explanation: The core principle is related to Malthusian theory, which posits that population growth tends to outstrip food supply.",
+  "isAnonymous": false 
+}
 
 ############################################
 ### 6️⃣ STUDENT FACTORY TEST (Temporary)

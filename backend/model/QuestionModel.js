@@ -42,5 +42,14 @@ const QuestionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+QuestionSchema.methods.addResponse = function(responseData) {
+    // Equivalent of this.responses.push(response)
+    this.responses.push(responseData);
+    
+    // Equivalent of saving the document after modification
+    return this.save(); 
+};
+
+
 const Question = mongoose.model("Question", QuestionSchema);
 export default Question;

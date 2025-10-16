@@ -65,4 +65,53 @@ router.get("/", auth(false), async (req, res) => {
   }
 });
 
+router.post(
+  "/:questionId/response", // Captures the ID of the question to respond to
+  auth(true),
+  requireRole("tutor"), // 🛑 CRUCIAL: Only Tutors are allowed to respond
+  [
+    // Validate the content field, which corresponds to the ResponseSchema
+    body("content").isString().trim().isLength({ min: 10 }),
+    body("isAnonymous").optional().isBoolean(),
+  ],
+  validate,
+  async (req, res) => {
+    const { questionId } = req.params;
+    const { content, isAnonymous } = req.body;
+    const tutorId = req.user.id; // The ID of the authenticated tutor
+
+    // 1. Prepare the data object for the response
+    const responseData = {
+      message: content,
+      postedBy: tutorId,
+      isAnonymous: isAnonymous || false,
+    };
+
+    try {
+      // 2. Find the question document
+      const question = await Question.findById(questionId);
+
+      if (!question) {
+        return res.status(404).json({ message: "Question not found" });
+      }
+
+      // 3. Use the Mongoose instance method to add the response and save
+      await question.addResponse(responseData);
+
+      // 4. Get the newly added response to return (it now has a Mongoose _id)
+      const lastResponse = question.responses[question.responses.length - 1];
+
+      // 5. Success response
+      return res.status(201).json({
+        message: "Response posted successfully",
+        response: lastResponse,
+      });
+
+    } catch (error) {
+      console.error("Error posting response:", error);
+      return res.status(500).json({ error: "Failed to post response" });
+    }
+  }
+);
+
 export default router;
