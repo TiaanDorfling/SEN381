@@ -21,6 +21,7 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.1",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
     "openai": "^6.3.0",
     "sen381": "file:.."
   },

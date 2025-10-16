@@ -148,6 +148,18 @@ Content-Type: application/json
   "topicId": "68f0f57183f54878f967e32b"
 }
 
+### Upload Resource to a Topic (Local Disk Storage)
+POST http://localhost:5000/api/topics/68f0f57183f54878f967e32b/resource
+Content-Type: multipart/form-data; boundary=---------------------------735323031399963166993862150
+Cookie: jwt=YOUR_VALID_JWT_TOKEN_HERE
+
+-----------------------------735323031399963166993862150
+Content-Disposition: form-data; name="resourceFile"; filename="my_new_resource.pdf"
+Content-Type: application/pdf
+
+< /path/to/your/local/file/my_new_resource.pdf
+-----------------------------735323031399963166993862150--
+
 ############################################
 ### 5️⃣ QUESTIONS MODULE
 ############################################

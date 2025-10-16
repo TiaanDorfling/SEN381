@@ -4,8 +4,7 @@ import { body, query } from 'express-validator';
 import { validate } from '../middleware/validate.js';
 import { auth } from '../middleware/auth.js';
 import Topic from '../model/Topic.js';
-import UserModel from '../model/UserModel.js';
-import e from 'express';
+import upload from '../utils/upload.js';
 
 const router = express.Router();
 
@@ -129,6 +128,54 @@ router.delete(
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Failed to unsubscribe due to a server error.' });
+    }
+  }
+);
+
+router.post(
+  '/:topicId/resource', // Use URL parameter to easily pass topicId to Multer
+  auth(true), 
+  upload.single('resourceFile'), // 🚨 Multer processes the file and saves it locally
+  async (req, res) => {
+    const { topicId } = req.params;
+    const userId = req.user._id; 
+    const file = req.file; // 🚨 Multer makes the file metadata available here
+
+    if (!file) {
+      return res.status(400).json({ message: 'No file uploaded or file failed validation.' });
+    }
+
+    try {
+      const topic = await Topic.findById(topicId);
+
+      if (!topic) {
+        // If topic not found, it's good practice to delete the uploaded file
+        // fs.unlinkSync(file.path); 
+        return res.status(404).json({ message: 'Topic not found' });
+      }
+
+      // 1. Prepare the resource object
+      const resourceData = {
+        fileName: file.originalname,
+        // The URL is constructed from the static route and the filename
+        fileUrl: `/uploads/topic-resources/${file.filename}`, 
+        uploadedBy: userId,
+        uploadedAt: new Date(),
+      };
+      
+      // 2. Update the Mongoose document using the instance method
+      await topic.addResource(resourceData);
+      
+      // 3. Success response
+      return res.status(201).json({ 
+        message: 'Resource uploaded and saved successfully.',
+        resource: resourceData
+      });
+      
+    } catch (error) {
+      console.error('File Upload Error:', error);
+      // Optional: fs.unlinkSync(file.path); // Clean up file on general error
+      return res.status(500).json({ message: 'Server error during file processing or save.' });
     }
   }
 );

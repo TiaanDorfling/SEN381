@@ -8,8 +8,13 @@ const topicSchema = new mongoose.Schema(
     moduleCode: { type: String, required: true, trim: true },
     status: { type: String, enum: ['OPEN', 'ASSIGNED', 'RESOLVED'], default: 'OPEN' },
     tags: [{ type: String, trim: true }],
-    subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-
+    subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    resources: [{
+      fileName: { type: String, required: true },
+      fileUrl: { type: String, required: true }, // The URL where the file is stored (e.g., S3, local)
+      uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+      uploadedAt: { type: Date, default: Date.now }
+    }]
   },
   { timestamps: true }
 );
@@ -33,6 +38,10 @@ topicSchema.methods.removeSubscriber = function(userId) {
     (subscriberId) => !subscriberId.equals(userId)
   );
   return this.save(); // Save the updated document
+};
+topicSchema.methods.addResource = function(resourceData) {
+  this.resources.push(resourceData);
+  return this.save();
 };
 topicSchema.methods.broadcastTopic = function() {};
 topicSchema.methods.notifyTutors = function() {};
