@@ -18,16 +18,15 @@ import { connectDB } from "./config/db.js";
 // Load environment variables first
 loadEnv();
 
-// --- Register Mongoose models (incl. discriminators) BEFORE routes ---
+// --- Register Mongoose models BEFORE routes ---
 import "./model/UserModel.js";
 import "./model/AdminModel.js";
 import "./model/TutorModel.js";
 import "./model/StudentModel.js";
-
 import "./model/AIChatBot.js";
 import "./model/Forum.js";
 import "./model/NotificationService.js";
-import "./model/privateMessage.js";   // note casing
+import "./model/privateMessage.js"; // note casing
 import "./model/QuestionModel.js";
 import "./model/Resource.js";
 import "./model/Response.js";
@@ -52,9 +51,9 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-// CORS
+// ---------------- CORS CONFIG ----------------
 const allow =
-  (process.env.CLIENT_ORIGIN || "")
+  (process.env.CLIENT_ORIGIN || "http://localhost:5173")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
@@ -62,23 +61,24 @@ const allow =
 app.use(
   cors({
     origin(origin, cb) {
-      // allow tools like curl/Postman (no Origin header)
-      if (!origin) return cb(null, true);
+      if (!origin) return cb(null, true); // allow tools like curl/Postman
       if (allow.includes(origin)) return cb(null, true);
+      console.warn(`CORS blocked origin: ${origin}`);
       return cb(new Error(`CORS: Origin not allowed: ${origin}`), false);
     },
     credentials: true,
   })
 );
-// (optional) handle preflight explicitly in case other middleware blocks it
-app.options("*", cors({ origin: (origin, cb) => cb(null, true), credentials: true }));
+
+// Handle OPTIONS preflight requests safely
+app.options("*", cors({ origin: allow, credentials: true }));
 
 // Body & cookies
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(cookieParser());
 
-// Optional: basic custom request trace (toggle via env)
+// Optional request tracing
 if (process.env.REQUEST_TRACE === "1") {
   app.use((req, _res, next) => {
     console.log("→", req.method, req.originalUrl);
@@ -86,29 +86,45 @@ if (process.env.REQUEST_TRACE === "1") {
   });
 }
 
-// Rate limiting
-import rateLimit from "./middleware/rateLimit.js";
-app.use(rateLimit);
+// Rate limiting (optional)
+try {
+  const rateLimit = (await import("./middleware/rateLimit.js")).default;
+  app.use(rateLimit);
+} catch {
+  console.warn("[warn] rateLimit middleware missing, continuing without it");
+}
 
 // ============================================================================
-//  STATIC FILES
+//  STATIC FILES + HEALTH CHECK
 // ============================================================================
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
-// Lightweight health check
-app.get("/healthz", (_req, res) =>
-  res.status(200).json({ ok: true, env: process.env.NODE_ENV || "dev" })
-);
+// ✅ Keep /healthz above all routers and error handlers
+app.get("/healthz", (req, res) => {
+  try {
+    console.log("→ /healthz called");
+    return res.status(200).json({
+      ok: true,
+      env: process.env.NODE_ENV || "dev",
+      time: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error("healthz error:", err);
+    return res
+      .status(500)
+      .json({ ok: false, error: err?.message || "healthz-failed" });
+  }
+});
 
 // ============================================================================
 //  ROUTES
 // ============================================================================
-
-// Helper: safely load a router from several common filename patterns.
-// If none exist, return an empty Router so the app still boots.
 import { Router } from "express";
-async function loadRoute(name /* e.g. 'auth' */) {
+
+// helper to dynamically import route if exists
+async function loadRoute(name) {
   const candidates = [
     `./routes/${name}.routes.js`,
     `./routes/${name}.route.js`,
@@ -119,12 +135,12 @@ async function loadRoute(name /* e.g. 'auth' */) {
     try {
       const mod = await import(p);
       if (mod?.default) return mod.default;
-    } catch (_) {
-      // try next
+    } catch {
+      // try next candidate
     }
   }
   console.warn(`[routes] No route file found for "${name}" (tried: ${candidates.join(", ")})`);
-  return Router(); // empty router
+  return Router();
 }
 
 const indexRouter       = await loadRoute("index");
