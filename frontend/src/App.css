@@ -1,3 +1,68 @@
-h1{
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+.home-container {
+  font-family: "Poppins", sans-serif;
+  padding: 0 2rem;
+  background-color: #f7f8fc;
+  min-height: 100vh;
+}
+
+.overview {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  height: 20px;
+  width: 100%;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background-color: #4caf50;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.completed-section,
+.grades-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.completed-section ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.grades-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grades-section th,
+.grades-section td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.grades-section th {
+  background-color: #f1f1f1;
 }

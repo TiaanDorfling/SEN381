@@ -1,0 +1,210 @@
+################################################################################
+# 🌐 BACKEND API TEST SUITE — CampusLearn (Free Model)
+# Use this file with VSCode REST Client or similar REST tester.
+# Make sure backend is running on http://localhost:5000 before testing.
+################################################################################
+
+############################################
+### 1️⃣ HEALTH CHECKS
+############################################
+
+### ✅ Basic server health
+GET http://localhost:5000/health
+
+### ✅ Environment key validation (checks loaded env vars)
+GET http://localhost:5000/health/env-keys
+
+
+############################################
+### 2️⃣ AUTHENTICATION & USER MANAGEMENT
+############################################
+
+### 🧍‍♂️ Register a new STUDENT account
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test Student",
+  "email": "student1@student.belgiumcampus.ac.za",
+  "password": "StrongPass123!",
+  "role": "student"
+}
+
+### 🧑‍🏫 Register a new TUTOR account
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Tutor Example",
+  "email": "tutor1@student.belgiumcampus.ac.za",
+  "password": "StrongPass123!",
+  "role": "tutor"
+}
+
+### 👑 Register a new ADMIN account
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin Example",
+  "email": "admin1@student.belgiumcampus.ac.za",
+  "password": "StrongPass123!",
+  "role": "admin"
+}
+
+### 🔑 Login (replace with the email you registered above)
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tutor1@student.belgiumcampus.ac.za",
+  "password": "StrongPass123!"
+}
+
+### 🔒 Check current session (requires jwt cookie from login)
+GET http://localhost:5000/api/auth/session
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MDQsImV4cCI6MTc2MDUyOTIwNH0.UoDugs6DMz24DmY1ILxfQml9KecgYa0zpFDmknytQKo
+
+### 🚪 Logout (clears the cookie)
+POST http://localhost:5000/api/auth/logout
+
+
+############################################
+### 3️⃣ USER MANAGEMENT (requires ADMIN login)
+############################################
+
+### 🧩 Admin creates a new user manually
+POST http://localhost:5000/api/user/create-user
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MDQsImV4cCI6MTc2MDUyOTIwNH0.UoDugs6DMz24DmY1ILxfQml9KecgYa0zpFDmknytQKo
+
+{
+  "name": "Created By Admin",
+  "email": "createdbyadmin@student.belgiumcampus.ac.za",
+  "password": "AdminMade123!",
+  "role": "student"
+}
+
+### ✏️ Admin updates a user's profile
+PUT http://localhost:5000/api/user/update/68ef7b760ee0cffcd37dd324
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MDQsImV4cCI6MTc2MDUyOTIwNH0.UoDugs6DMz24DmY1ILxfQml9KecgYa0zpFDmknytQKo
+
+{
+  "name": "Updated Student Name",
+  "email": "updatedstudent@student.belgiumcampus.ac.za"
+}
+
+### ❌ Admin deletes a user
+DELETE http://localhost:5000/api/user/delete/68ef7b760ee0cffcd37dd324
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MDQsImV4cCI6MTc2MDUyOTIwNH0.UoDugs6DMz24DmY1ILxfQml9KecgYa0zpFDmknytQKo
+
+### 🧠 User updates their own profile (self-service)
+PUT http://localhost:5000/api/user/update-user
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MDQsImV4cCI6MTc2MDUyOTIwNH0.UoDugs6DMz24DmY1ILxfQml9KecgYa0zpFDmknytQKo
+
+{
+  "name": "Updated My Own Name"
+}
+
+
+############################################
+### 4️⃣ TOPICS MODULE
+############################################
+
+### 📖 Get all topics (requires login)
+GET http://localhost:5000/api/topics
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+### ➕ Create a new topic (requires login)
+POST http://localhost:5000/api/topics
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+{
+  "title": "Data Structures Assignment Help",
+  "body": "Can someone explain linked list complexity analysis?",
+  "moduleCode": "SEN381",
+  "tags": ["linked-list", "complexity", "algorithms"]
+}
+
+### 🔍 Search topics by keyword
+GET http://localhost:5000/api/topics?keyword=linkedeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFUeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmNjU4ZDY1Mjg3OGQ5Mjg4NjkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjA1MjU2MzksImV4cCI6MTc2MDUyOTIzOX0.LBZlOhq4OE-NU-MphPHJYlA26W6wvoBN3Dx_-h8QADw
+
+### Subscribe to topic
+POST http://localhost:5000/api/topics/subscribe
+Content-Type: application/json
+
+{
+  "topicId": "68f0f57183f54878f967e32b"
+}
+
+### Remove subscriber by id
+DELETE  http://localhost:5000/api/topics/unsubscribe
+Content-Type: application/json
+
+{
+  "topicId": "68f0f57183f54878f967e32b"
+}
+
+### Upload Resource to a Topic (Local Disk Storage)
+POST http://localhost:5000/api/topics/68f0f57183f54878f967e32b/resource
+Content-Type: multipart/form-data; boundary=---------------------------735323031399963166993862150
+Cookie: jwt=YOUR_VALID_JWT_TOKEN_HERE
+
+-----------------------------735323031399963166993862150
+Content-Disposition: form-data; name="resourceFile"; filename="my_new_resource.pdf"
+Content-Type: application/pdf
+
+< /path/to/your/local/file/my_new_resource.pdf
+-----------------------------735323031399963166993862150--
+
+############################################
+### 5️⃣ QUESTIONS MODULE
+############################################
+
+### 📝 Post a new question (Student only)
+POST http://localhost:5000/api/questions
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+{
+  "title": "How to connect Mongoose to MongoDB Atlas?",
+  "body": "I keep getting authentication failed errors even though I used the right URI.",
+  "moduleCode": "SEN381"
+}
+
+### 📚 Get all questions (feed)
+GET http://localhost:5000/api/questions
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+### Tutor Posts Response to a Question
+POST http://localhost:5000/api/questions/68ef808158d652878d928880/response
+Content-Type: application/json
+Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmMjU4ZDY1Mjg3OGQ5Mjg4NjYiLCJyb2xlIjoidHV0b3IiLCJpYXQiOjE3NjA2NDQwOTcsImV4cCI6MTc2MDY0NzY5N30.OEceP16hRtvqjdQGlgDzS7xihXf5nahjtPpleuJlGmA; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2ZkYjU4ZDY1Mjg3OGQ5Mjg4NzciLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc2MDUyNjM4NCwiZXhwIjoxNzYwNTI5OTg0fQ.Boq6M0lLKmuEc32SlBF2pDnuiQHXkPf_ADiuq7qQcFU
+
+{
+  "content": "A detailed explanation: The core principle is related to Malthusian theory, which posits that population growth tends to outstrip food supply.",
+  "isAnonymous": false 
+}
+
+############################################
+### 6️⃣ STUDENT FACTORY TEST (Temporary)
+############################################
+
+### 🧪 Quick student creation test (does NOT persist to DB)
+GET http://localhost:5000/students/get-student
+
+
+############################################
+### 7️⃣ AI CHAT (Gemini Free Model)
+############################################
+
+### 🤖 Ask the AI Tutor a question
+POST http://localhost:5000/api/ai/chat
+Content-Type: application/json
+
+{
+  "message": "Explain the difference between synchronous and asynchronous code in JavaScript."
+}

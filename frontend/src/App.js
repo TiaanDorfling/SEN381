@@ -1,30 +1,22 @@
+import logo from './logo.svg';
 import './App.css';
+import StudentCreator from './components/getStudent.js'
+import axios from 'axios';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import LogIn from "./auth/LogIn";
-import SignUp from "./auth/SignUp";
-import Dashboard from "./pages/Dashboard";
-import Forum from "./pages/Forum";
-import Messages from "./pages/Messages";
-
-import {BrowserRouter, Routes, Route } from "react-router-dom";
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:5000';
 
 function App() {
   return (
     <BrowserRouter>
-      
-      <main className="container mx-auto p-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/forum" element={<Forum />} />
-          <Route path="/messages" element={<Messages />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        
+      </Routes>
     </BrowserRouter>
-    
   );
 }
 
 export default App;
+
