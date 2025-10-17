@@ -19,10 +19,19 @@ import { connectDB } from "./config/db.js";
 loadEnv();
 
 // --- Register Mongoose models (incl. discriminators) BEFORE routes ---
-import "./models/User.js";
-import "./models/Admin.js";
-import "./models/Tutor.js";
-import "./models/Student.js";
+import "./model/UserModel.js";
+import "./model/AdminModel.js";
+import "./model/TutorModel.js";
+import "./model/StudentModel.js";
+
+import "./model/AIChatBot.js";
+import "./model/Forum.js";
+import "./model/NotificationService.js";
+import "./model/privateMessage.js";   // note casing
+import "./model/QuestionModel.js";
+import "./model/Resource.js";
+import "./model/Response.js";
+import "./model/Topic.js";
 
 // --- Connect to MongoDB ---
 await connectDB(process.env.MONGO_URI);
@@ -44,14 +53,25 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // CORS
-const allowed =
-  (process.env.CLIENT_ORIGIN && process.env.CLIENT_ORIGIN.split(",")) || ["*"];
+const allow =
+  (process.env.CLIENT_ORIGIN || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
 app.use(
   cors({
-    origin: allowed,
+    origin(origin, cb) {
+      // allow tools like curl/Postman (no Origin header)
+      if (!origin) return cb(null, true);
+      if (allow.includes(origin)) return cb(null, true);
+      return cb(new Error(`CORS: Origin not allowed: ${origin}`), false);
+    },
     credentials: true,
   })
 );
+// (optional) handle preflight explicitly in case other middleware blocks it
+app.options("*", cors({ origin: (origin, cb) => cb(null, true), credentials: true }));
 
 // Body & cookies
 app.use(express.json({ limit: "1mb" }));
@@ -66,7 +86,7 @@ if (process.env.REQUEST_TRACE === "1") {
   });
 }
 
-// Rate limiting (exists in project structure)
+// Rate limiting
 import rateLimit from "./middleware/rateLimit.js";
 app.use(rateLimit);
 
@@ -84,15 +104,38 @@ app.get("/healthz", (_req, res) =>
 // ============================================================================
 //  ROUTES
 // ============================================================================
-import indexRouter from "./routes/index.js";
-import authRoutes from "./routes/auth.routes.js";
-import topicRoutes from "./routes/topics.routes.js";
-import forumRoutes from "./routes/forum.routes.js";
-import submissionsRoutes from "./routes/submissions.routes.js";
-import resourcesRoutes from "./routes/resources.routes.js";
-import messagesRoutes from "./routes/messages.routes.js";
-import adminRoutes from "./routes/admin.routes.js";
-import calendarRoutes from "./routes/calendar.routes.js";
+
+// Helper: safely load a router from several common filename patterns.
+// If none exist, return an empty Router so the app still boots.
+import { Router } from "express";
+async function loadRoute(name /* e.g. 'auth' */) {
+  const candidates = [
+    `./routes/${name}.routes.js`,
+    `./routes/${name}.route.js`,
+    `./routes/${name}Routes.js`,
+    `./routes/${name}.js`,
+  ];
+  for (const p of candidates) {
+    try {
+      const mod = await import(p);
+      if (mod?.default) return mod.default;
+    } catch (_) {
+      // try next
+    }
+  }
+  console.warn(`[routes] No route file found for "${name}" (tried: ${candidates.join(", ")})`);
+  return Router(); // empty router
+}
+
+const indexRouter       = await loadRoute("index");
+const authRoutes        = await loadRoute("auth");
+const topicRoutes       = await loadRoute("topics");
+const forumRoutes       = await loadRoute("forum");
+const submissionsRoutes = await loadRoute("submissions");
+const resourcesRoutes   = await loadRoute("resources");
+const messagesRoutes    = await loadRoute("messages");
+const adminRoutes       = await loadRoute("admin");
+const calendarRoutes    = await loadRoute("calendar");
 
 app.use("/", indexRouter);
 app.use("/api/auth", authRoutes);

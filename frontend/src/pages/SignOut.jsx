@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { logout } from "../api/auth";
 
 export default function SignOut() {
   useEffect(() => {
-    try {
-      localStorage.removeItem("cl_auth");
-    } catch {}
+    (async () => {
+      try { await logout(); } catch {}
+      try { localStorage.removeItem("cl_auth"); } catch {}
+    })();
   }, []);
   return <Navigate to="/auth" replace />;
 }

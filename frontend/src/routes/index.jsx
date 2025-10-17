@@ -11,6 +11,7 @@ import Home from "../pages/public/Home.jsx";
 import Courses from "../pages/public/Courses.jsx";
 import CourseInfo from "../pages/public/CourseInfo.jsx";
 import Auth from "../pages/public/Auth.jsx";
+import SignUp from "../auth/SignUp.jsx"; // ✅ NEW
 
 import CalendarHome from "../pages/calendar/CalendarHome.jsx";
 import StudentDashboard from "../pages/student/Dashboard.jsx";
@@ -18,6 +19,20 @@ import TutorDashboard from "../pages/tutor/Dashboard.jsx";
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import SignOut from "../pages/SignOut.jsx";
+
+/**
+ * Optional: prevent signed-in users from visiting /auth or /auth/register.
+ * Uses the same localStorage key we set after successful login/session check.
+ * (Auth.jsx also checks the server session and will redirect, but this makes it route-level.)
+ */
+function PublicOnly({ children }) {
+  let authed = false;
+  try {
+    const s = JSON.parse(localStorage.getItem("cl_auth") || "null");
+    authed = !!s?.user;
+  } catch {}
+  return authed ? <Navigate to="/app/calendar" replace /> : children;
+}
 
 export default function AppRoutes() {
   return (
@@ -27,7 +42,9 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:id" element={<CourseInfo />} />
-        <Route path="/auth" element={<Auth />} />
+        {/* ✅ Wrap auth routes so logged-in users bounce to /app/calendar */}
+        <Route path="/auth" element={<PublicOnly><Auth /></PublicOnly>} />
+        <Route path="/auth/register" element={<PublicOnly><SignUp /></PublicOnly>} />
       </Route>
 
       {/* Private area lives under /app/* so it doesn't hijack "/" */}
