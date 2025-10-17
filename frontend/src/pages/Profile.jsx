@@ -1,4 +1,4 @@
-
+import React from "react";
 
 const Profile = () => {
   return (
@@ -8,4 +8,4 @@ const Profile = () => {
   );
 };
 
-export default Profiles;
+export default Profile;
