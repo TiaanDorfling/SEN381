@@ -1,3 +1,4 @@
+// frontend/src/routes/index.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -11,43 +12,55 @@ import Home from "../pages/public/Home.jsx";
 import Courses from "../pages/public/Courses.jsx";
 import CourseInfo from "../pages/public/CourseInfo.jsx";
 import Auth from "../pages/public/Auth.jsx";
-import SignUp from "../auth/SignUp.jsx"; // ✅ NEW
+import SignUp from "../auth/SignUp.jsx";
 
 import CalendarHome from "../pages/calendar/CalendarHome.jsx";
-import StudentDashboard from "../pages/student/Dashboard.jsx";
-import TutorDashboard from "../pages/tutor/Dashboard.jsx";
-import AdminDashboard from "../pages/admin/Dashboard.jsx";
+
+// Make sure these files exist with these exact names:
+import StudentDashboard from "../pages/student/StudentDashboard.jsx";
+import TutorDashboard   from "../pages/tutor/TutorDashboard.jsx";
+import AdminDashboard   from "../pages/admin/AdminDashboard.jsx";
+
 import NotFound from "../pages/NotFound.jsx";
 import SignOut from "../pages/SignOut.jsx";
 
-/**
- * Optional: prevent signed-in users from visiting /auth or /auth/register.
- * Uses the same localStorage key we set after successful login/session check.
- * (Auth.jsx also checks the server session and will redirect, but this makes it route-level.)
- */
+/* ---------- Helpers ---------- */
+function getLocalUser() {
+  try { return JSON.parse(localStorage.getItem("cl_user") || "null"); } catch { return null; }
+}
+
 function PublicOnly({ children }) {
   let authed = false;
   try {
-    const s = JSON.parse(localStorage.getItem("cl_auth") || "null");
-    authed = !!s?.user;
-  } catch {}
-  return authed ? <Navigate to="/app/calendar" replace /> : children;
+    const u = getLocalUser();
+    const a = JSON.parse(localStorage.getItem("cl_auth") || "null");
+    authed = !!(u || a?.email || a?.user);
+  } catch { /* ignore */ }
+  return authed ? <Navigate to="/app" replace /> : children;
+}
+
+/** Role-based landing under /app */
+function PrivateIndex() {
+  const u = getLocalUser();
+  const role = String(u?.role || "").toLowerCase();
+  if (role === "admin") return <Navigate to="admin" replace />;
+  if (role === "tutor") return <Navigate to="tutor" replace />;
+  return <Navigate to="student" replace />; // default
 }
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Public area */}
+      {/* ---------- Public Area ---------- */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:id" element={<CourseInfo />} />
-        {/* ✅ Wrap auth routes so logged-in users bounce to /app/calendar */}
         <Route path="/auth" element={<PublicOnly><Auth /></PublicOnly>} />
         <Route path="/auth/register" element={<PublicOnly><SignUp /></PublicOnly>} />
       </Route>
 
-      {/* Private area lives under /app/* so it doesn't hijack "/" */}
+      {/* ---------- Private Area (/app/*) ---------- */}
       <Route
         path="/app"
         element={
@@ -56,10 +69,13 @@ export default function AppRoutes() {
           </AuthGuard>
         }
       >
-        {/* Default private landing => /app/calendar */}
-        <Route index element={<Navigate to="calendar" replace />} />
+        {/* Role-based index */}
+        <Route index element={<PrivateIndex />} />
+
+        {/* Keep calendar if needed */}
         <Route path="calendar" element={<CalendarHome />} />
 
+        {/* Dashboards (role guarded) */}
         <Route element={<RoleGuard allow={["student"]} />}>
           <Route path="student" element={<StudentDashboard />} />
         </Route>
@@ -72,10 +88,22 @@ export default function AppRoutes() {
           <Route path="admin" element={<AdminDashboard />} />
         </Route>
 
+        {/* Common aliases so links like "/app/dashboard" or "/dashboard" don't 404 */}
+        <Route path="dashboard" element={<PrivateIndex />} />
+        <Route path="home" element={<PrivateIndex />} />
+
+        {/* Sign out */}
         <Route path="signout" element={<SignOut />} />
+
+        {/* anything else under /app -> role landing */}
+        <Route path="*" element={<PrivateIndex />} />
       </Route>
 
-      {/* Fallback */}
+      {/* Top-level aliases that people often bookmark/use */}
+      <Route path="/dashboard" element={<Navigate to="/app" replace />} />
+      <Route path="/home" element={<Navigate to="/app" replace />} />
+
+      {/* ---------- Fallback ---------- */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

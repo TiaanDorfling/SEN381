@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import logo from "../logo.svg"; // ⬅️ import the logo URL
 
 export default function PublicLayout() {
   const { pathname } = useLocation();
@@ -12,10 +13,19 @@ export default function PublicLayout() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => nav("/")}
-            className="text-xl font-heading text-primary tracking-wide"
+            className="flex items-center gap-3"
             aria-label="CampusLearn Home"
           >
-            CampusLearn
+            <img
+              src={logo}
+              alt="CampusLearn logo"
+              className="h-7 w-7"
+              loading="eager"
+              decoding="async"
+            />
+            <span className="text-xl font-heading text-primary tracking-wide">
+              CampusLearn
+            </span>
           </button>
 
           <nav className="hidden md:flex gap-6 font-sans items-center">
@@ -38,12 +48,10 @@ export default function PublicLayout() {
         </div>
       </header>
 
-      {/* Content */}
       <main className="flex-1">
         <Outlet />
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-primary/10 bg-white">
         <div className="max-w-6xl mx-auto px-4 py-10 grid gap-6 md:grid-cols-3">
           <div>
@@ -74,9 +82,7 @@ function HeaderLink({ to, active, children }) {
   return (
     <Link
       to={to}
-      className={`hover:underline ${
-        active ? "text-primary font-semibold" : "text-primary-900"
-      }`}
+      className={`hover:underline ${active ? "text-primary font-semibold" : "text-primary-900"}`}
     >
       {children}
     </Link>

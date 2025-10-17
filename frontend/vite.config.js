@@ -1,4 +1,3 @@
-// frontend/vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -10,8 +9,9 @@ export default defineConfig({
       '/api': {
         target: 'http://127.0.0.1:5000',
         changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '') // '/api/healthz' -> '/healthz'
+        secure: false
+        // ❌ remove the rewrite that stripped /api
+        // rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }
