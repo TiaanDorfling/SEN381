@@ -189,6 +189,9 @@ Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGVmN2NmMjU4ZDY1Mjg
   "isAnonymous": false 
 }
 
+### fetch responses to a question
+GET http://localhost:5000/api/questions/68ef808158d652878d928880/responses
+
 ############################################
 ### 6️⃣ STUDENT FACTORY TEST (Temporary)
 ############################################

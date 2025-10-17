@@ -114,4 +114,30 @@ router.post(
   }
 );
 
+router.get(
+  "/:questionId/responses",
+  auth(true),
+  async (req,res) => {
+    const {questionId} = req.params;
+    try{
+        const question = await Question.findById(questionId);
+
+        if (!question){
+          return res.status(400).json({message: "question does not exist!"})
+        }
+
+        const responses = question.responses;
+
+        return res.status(200).json({
+          message: "Responses returned successfully",
+          responses: responses
+      })
+    }
+    catch(error){
+      console.error("Error fetching responses: ", error);
+      return res.status(500).json({error:"Failed to fetch responses."})
+    }
+  }
+);
+
 export default router;
