@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../layout/navbar";
-// import "App.css";
+import Navbar from '../layout/navbar';
+import 'App.css';
 
 function Home() {
   // Example mock data — replace later with dynamic data from backend
