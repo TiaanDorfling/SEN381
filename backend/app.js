@@ -26,7 +26,7 @@ import "./model/StudentModel.js";
 import "./model/AIChatBot.js";
 import "./model/Forum.js";
 import "./model/NotificationService.js";
-import "./model/privateMessage.js"; // note casing
+import "./model/privateMessage.js";
 import "./model/QuestionModel.js";
 import "./model/Resource.js";
 import "./model/Response.js";
@@ -152,6 +152,7 @@ const resourcesRoutes   = await loadRoute("resources");
 const messagesRoutes    = await loadRoute("messages");
 const adminRoutes       = await loadRoute("admin");
 const calendarRoutes    = await loadRoute("calendar");
+const studentRoutes     = await loadRoute("student");
 
 app.use("/", indexRouter);
 app.use("/api/auth", authRoutes);
@@ -162,6 +163,7 @@ app.use("/api/resources", resourcesRoutes);
 app.use("/api/messages", messagesRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/calendar", calendarRoutes);
+app.use("/api/student", studentRoutes);
 
 // ============================================================================
 //  ERROR HANDLING
